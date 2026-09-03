@@ -129,11 +129,16 @@
     trail.setAttribute("transform", "translate(22 30) rotate(1.6 720 450)");
     lead.after(trail);
 
-    // draw across the panel's whole time on screen, so the thread is
-    // always moving with the scroll (never sits fully drawn), and
-    // retracts the same way on the way back up
+    // draw starts as the panel enters and FINISHES at ~75% of the way
+    // through (lead) / ~85% (trail), so the thread lands its endpoint
+    // before the panel leaves; retracts the same way on the way back up
     var section = svg.closest("section") || svg.parentElement;
-    [[lead, "top bottom", "bottom top", 0.4], [trail, "top 78%", "bottom 8%", 1.2]]
+    function endAt(frac) {
+      return function () {
+        return "+=" + Math.round((section.offsetHeight + window.innerHeight) * frac);
+      };
+    }
+    [[lead, "top bottom", endAt(0.75), 0.4], [trail, "top bottom", endAt(0.85), 1.1]]
       .forEach(function (cfg) {
         var p = cfg[0], L = p.getTotalLength();
         p.style.setProperty("--len", L);
