@@ -1402,9 +1402,9 @@
 
   /* marker highlight — draws in on reveal */
   .mark{
-    background-image:linear-gradient(transparent 58%, color-mix(in srgb, var(--brand) 46%, transparent) 58%);
+    background-image:linear-gradient(transparent 74%, color-mix(in srgb, var(--brand) 42%, transparent) 74%);
     background-size:0% 100%; background-repeat:no-repeat;
-    padding:0 .06em; transition:background-size .7s var(--e-out) .2s;
+    padding:0; transition:background-size .7s var(--e-out) .2s;
   }
   [data-reveal].in .mark{ background-size:100% 100%; }
   @media (prefers-reduced-motion:reduce){ .mark{ background-size:100% 100%; transition:none; } }
@@ -1576,3 +1576,25 @@
 
   /* debt bar draws on scroll; keep its own easing for the manual slider after */
   [data-debt-draw] .debt__fill{ background:var(--brand); }
+
+  /* ############################################################
+     Bigger feature visuals + tighter vertical rhythm
+     ############################################################ */
+  /* the arc / curve: larger, and stop the pinned frame leaving a big
+     empty top */
+  .scrolly__pin{ min-height:74svh; flex-direction:column; justify-content:center; }
+  .scrolly__pin .band__inner{ width:100%; }
+  @media (min-width:700px){ .scrolly__pin{ padding:96px 56px; } }
+  .scrolly .arc{ margin-top:2.6rem; max-width:1120px; margin-inline:auto; }
+  .scrolly .arc svg{ max-width:1120px; }
+  .scrolly .arc__now{ font-size:clamp(1.05rem,2vw,1.3rem); }
+
+  /* breathing ring: bigger */
+  .pacer__stage{ width:188px; height:188px; }
+  .pacer__orb{ width:168px; height:168px; }
+
+  /* founder portrait: bigger */
+  .band__grid--split .story__media img:only-child{ max-width:520px; }
+
+  /* a touch denser so the page reads as one piece */
+  @media (min-width:700px){ .band{ padding:104px 56px; } }
