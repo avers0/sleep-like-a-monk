@@ -138,7 +138,7 @@
         return "+=" + Math.round((section.offsetHeight + window.innerHeight) * frac);
       };
     }
-    [[lead, "top bottom", endAt(0.75), 0.4], [trail, "top bottom", endAt(0.85), 1.1]]
+    [[lead, "top bottom", endAt(0.85), 0.4], [trail, "top bottom", endAt(0.95), 1.1]]
       .forEach(function (cfg) {
         var p = cfg[0], L = p.getTotalLength();
         p.style.setProperty("--len", L);
