@@ -1582,9 +1582,10 @@
      ############################################################ */
   /* the arc / curve: larger, and stop the pinned frame leaving a big
      empty top */
-  .scrolly__pin{ min-height:74svh; flex-direction:column; justify-content:center; }
+  .scrolly__pin{ min-height:0; flex-direction:column; justify-content:center; padding:90px 22px 56px; }
   .scrolly__pin .band__inner{ width:100%; }
-  @media (min-width:700px){ .scrolly__pin{ padding:96px 56px; } }
+  @media (min-width:700px){ .scrolly__pin{ padding:96px 56px 64px; } }
+  .scrolly .arc{ margin-top:1.8rem; }
   .scrolly .arc{ margin-top:2.6rem; max-width:1120px; margin-inline:auto; }
   .scrolly .arc svg{ max-width:1120px; }
   .scrolly .arc__now{ font-size:clamp(1.05rem,2vw,1.3rem); }

@@ -262,7 +262,7 @@
     render(0);
     ScrollTrigger.create({
       trigger: wrap, start: "top top",
-      end: function () { return "+=" + Math.round(window.innerHeight * 3.2); },
+      end: function () { return "+=" + Math.round(window.innerHeight * 1.9); },
       pin: pin, scrub: true, invalidateOnRefresh: true,
       // refresh this (and size its pin-spacer) before every trigger below it,
       // so their start/end account for the extra height
