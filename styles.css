@@ -476,10 +476,52 @@
     color:var(--ink-soft); padding-bottom:3px; border-bottom:2px solid transparent;
   }
   .sitenav a:hover,.sitenav a[aria-current="page"]{ color:var(--ink); border-bottom-color:var(--gold); }
+  .sitenav__enquire{ display:none; }
+  .nav-toggle{ display:none; }
+
+  /* ---- mobile: nav collapses behind a hamburger instead of wrapping
+     onto extra rows (that used to push the masthead to 3 lines and eat
+     ~150px of the viewport before any content showed) ---- */
   @media (max-width:640px){
-    .masthead .wrap{ flex-wrap:wrap; gap:.7rem 1rem; }
-    .sitenav{ order:3; width:100%; gap:1.1rem; flex-wrap:wrap; padding-top:.2rem; }
-    .sitenav a{ font-size:11px; }
+    .nav-toggle{
+      display:flex; flex-direction:column; justify-content:center; align-items:flex-end;
+      gap:5px; width:30px; height:26px; padding:0; border:none; background:none; cursor:pointer;
+    }
+    .nav-toggle span{
+      display:block; width:100%; height:2px; background:currentColor; border-radius:2px;
+      transition:transform .25s var(--e-out), opacity .25s var(--e-out), width .25s var(--e-out);
+    }
+    .nav-toggle span:nth-child(2){ width:70%; }
+    .masthead.nav-open .nav-toggle span:nth-child(1){ transform:translateY(7px) rotate(45deg); width:100%; }
+    .masthead.nav-open .nav-toggle span:nth-child(2){ opacity:0; }
+    .masthead.nav-open .nav-toggle span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); width:100%; }
+
+    .masthead .wrap{ flex-wrap:nowrap; }
+    .sitenav{
+      position:fixed; inset:0; z-index:-1;
+      flex-direction:column; align-items:flex-start; justify-content:center;
+      gap:1.6rem; padding:0 1.6rem;
+      background:var(--paper);
+      opacity:0; visibility:hidden; transform:translateY(-8px);
+      transition:opacity .3s var(--e-out), transform .3s var(--e-out), visibility 0s linear .3s;
+    }
+    .masthead.nav-open .sitenav{
+      opacity:1; visibility:visible; transform:none; z-index:40;
+      transition:opacity .3s var(--e-out), transform .3s var(--e-out);
+    }
+    /* brand + hamburger/close must stay above the opaque dropdown */
+    .brand,.masthead-right{ position:relative; z-index:41; }
+    .sitenav a{
+      font-size:1.5rem; letter-spacing:.03em; text-transform:none;
+      font-family:var(--title); font-weight:400; color:var(--ink);
+    }
+    .sitenav__enquire{
+      display:inline-block; margin-top:.6rem; border:1.5px solid var(--rule-strong);
+      border-radius:999px; padding:.7rem 1.5rem; font-size:.72rem;
+      font-family:var(--serif); font-weight:600; text-transform:uppercase; letter-spacing:.14em;
+    }
+    .masthead .tel{ display:none; }
+    .masthead .enquire{ display:none; }
   }
 
   /* home hero: 5 Pillars master cover */
@@ -1310,6 +1352,16 @@
   }
   .masthead.on-dark .sitenav a{ color:rgba(255,255,255,.82); }
   .masthead.on-dark .sitenav a:hover{ color:#fff; border-bottom-color:#fff; }
+  .nav-toggle{ color:var(--ink); }
+  .masthead.on-dark .nav-toggle{ color:#fff; }
+  /* the open dropdown is always an opaque light panel regardless of
+     on-dark, so its links must stay dark even when the bar itself is
+     the smoked-glass on-dark variant */
+  .masthead.on-dark.nav-open .sitenav a{ color:var(--ink); }
+  .masthead.on-dark.nav-open .sitenav a:hover{ color:var(--ink); border-bottom-color:var(--gold); }
+  /* the toggle becomes a close (X) button sitting on the opaque light
+     dropdown, not the dark hero — it needs the dark color even in on-dark */
+  .masthead.on-dark.nav-open .nav-toggle{ color:var(--ink); }
   .masthead.on-dark .tel{ color:rgba(255,255,255,.8); }
   .masthead.on-dark .tel:hover{ color:#fff; }
 
@@ -1421,6 +1473,9 @@
      trail is lighter, offset, and drawn on a lag so it follows rather
      than moves with the lead. Each path exits where the next enters. ---- */
   .swoop{ position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none; z-index:0; }
+  /* on narrow viewports panel text runs centered and full-width, so the
+     line has nowhere to run without cutting across letters — drop it */
+  @media (max-width:700px){ .swoop{ display:none; } }
   .swoop path{ fill:none; stroke-linecap:round; stroke-linejoin:round; }
   .swoop .swoop__lead{ stroke:rgba(255,255,255,.62); stroke-width:1.6; }
   .swoop .swoop__trail{ stroke:rgba(255,255,255,.24); stroke-width:1; }

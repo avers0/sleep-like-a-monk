@@ -88,6 +88,41 @@
   });
   document.body.appendChild(toTop);
 
+  /* ---- mobile nav: hamburger opens the link list as a full-bleed
+     dropdown, closes on link click / Escape / outside click ---- */
+  var navToggle = document.querySelector('.nav-toggle');
+  var sitenav = document.getElementById('sitenav');
+  if(navToggle && sitenav && mast){
+    function closeNav(){
+      mast.classList.remove('nav-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      if(window.__lenis) window.__lenis.start();
+    }
+    function openNav(){
+      mast.classList.add('nav-open');
+      mast.classList.remove('nav-hidden');
+      navToggle.setAttribute('aria-expanded', 'true');
+      if(window.__lenis) window.__lenis.stop();
+    }
+    navToggle.addEventListener('click', function(){
+      mast.classList.contains('nav-open') ? closeNav() : openNav();
+    });
+    sitenav.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', closeNav);
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' && mast.classList.contains('nav-open')) closeNav();
+    });
+    document.addEventListener('click', function(e){
+      if(!mast.classList.contains('nav-open')) return;
+      if(mast.contains(e.target)) return;
+      closeNav();
+    });
+    window.addEventListener('resize', function(){
+      if(window.innerWidth > 640 && mast.classList.contains('nav-open')) closeNav();
+    });
+  }
+
   var lastY = window.scrollY || 0;
   var ticking = false;
   function frame(){
@@ -98,8 +133,9 @@
     var pv = Math.min(1, y / max).toFixed(4);
     doc.style.setProperty('--p', pv);
     if(mast && !window.__motion) mast.classList.toggle('stuck', y > 8);
-    /* hide the nav while scrolling down (past the hero), show it on the way up */
-    if(mast){
+    /* hide the nav while scrolling down (past the hero), show it on the way up —
+       never while the mobile dropdown is open */
+    if(mast && !mast.classList.contains('nav-open')){
       if(y > lastY + 4 && y > 260) mast.classList.add('nav-hidden');
       else if(y < lastY - 4 || y < 120) mast.classList.remove('nav-hidden');
     }
