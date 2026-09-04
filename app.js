@@ -76,6 +76,19 @@
     var mx = mini.querySelector('.minicta__x');
     if(mx) mx.addEventListener('click', function(){ miniDismissed = true; mini.classList.remove('show'); });
   }
+  /* ---- back-to-top control (all viewports; most useful on mobile) ---- */
+  var toTop = document.createElement('button');
+  toTop.className = 'to-top';
+  toTop.type = 'button';
+  toTop.setAttribute('aria-label', 'Scroll back to top');
+  toTop.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V6M6 12l6-6 6 6"/></svg>';
+  toTop.addEventListener('click', function(){
+    if(window.__lenis){ window.__lenis.scrollTo(0, { duration: 0.9 }); }
+    else { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  });
+  document.body.appendChild(toTop);
+
+  var lastY = window.scrollY || 0;
   var ticking = false;
   function frame(){
     ticking = false;
@@ -85,6 +98,13 @@
     var pv = Math.min(1, y / max).toFixed(4);
     doc.style.setProperty('--p', pv);
     if(mast && !window.__motion) mast.classList.toggle('stuck', y > 8);
+    /* hide the nav while scrolling down (past the hero), show it on the way up */
+    if(mast){
+      if(y > lastY + 4 && y > 260) mast.classList.add('nav-hidden');
+      else if(y < lastY - 4 || y < 120) mast.classList.remove('nav-hidden');
+    }
+    toTop.classList.toggle('show', y > window.innerHeight * 0.9);
+    lastY = y;
     if(mini && !miniDismissed) mini.classList.toggle('show', (y / max) > 0.55 && (y / max) < 0.985);
     if(!reduce && cover && ringwrap){
       var ch = cover.offsetHeight || 1;

@@ -1599,3 +1599,44 @@
 
   /* a touch denser so the page reads as one piece */
   @media (min-width:700px){ .band{ padding:104px 56px; } }
+
+  /* ############################################################
+     Lean editorial layout — prose sections
+     ############################################################ */
+  .band__inner--prose{ max-width:760px; }
+  .band__inner--prose h2{ margin-bottom:.4rem; }
+  .prose{
+    font-size:1.13rem; line-height:1.78; margin:1.15rem 0 0; color:var(--ink);
+    max-width:64ch;
+  }
+  .prose strong{ font-weight:600; }
+  .prose-h{
+    font-family:var(--title); font-weight:400; letter-spacing:.005em;
+    font-size:clamp(1.25rem,2.6vw,1.6rem); line-height:1.3;
+    margin:2.6rem 0 .3rem; color:var(--ink);
+  }
+  .band__inner--prose .terms{ margin-top:1.6rem; }
+
+  /* ############################################################
+     Mobile: auto-hiding nav + back-to-top control
+     ############################################################ */
+  .masthead{ transition:transform .32s var(--e-out), background .35s var(--e-out), backdrop-filter .35s var(--e-out), border-color .35s var(--e-out); }
+  @media (max-width:860px){
+    .masthead.nav-hidden{ transform:translateY(-106%); }
+  }
+
+  .to-top{
+    position:fixed; right:16px; bottom:16px; z-index:60;
+    width:46px; height:46px; display:grid; place-items:center;
+    border:1px solid var(--rule-strong); border-radius:50%;
+    background:color-mix(in srgb, var(--paper) 82%, transparent);
+    -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+    color:var(--ink); cursor:pointer;
+    opacity:0; transform:translateY(10px) scale(.9); pointer-events:none;
+    transition:opacity .25s var(--e-out), transform .25s var(--e-out), background .2s var(--e-out);
+  }
+  .to-top.show{ opacity:1; transform:none; pointer-events:auto; }
+  .to-top:hover{ background:var(--paper); }
+  .to-top svg{ width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  @media (min-width:861px){ .to-top{ right:24px; bottom:24px; } }
+  @media (prefers-reduced-motion:reduce){ .to-top{ transition:opacity .2s linear; transform:none; } }
