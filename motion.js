@@ -103,14 +103,45 @@
     });
   });
 
-  /* ---- parallax on panel backgrounds. Scale > the travel so a shifted
-     bg never exposes the panel's dark fill at an edge. ---- */
+  /* ---- parallax on panel backgrounds. Bg travels at roughly a third of
+     the panel's own scroll distance (ClearPath-style lag), same direction
+     as scroll. Scale > the travel so a shifted bg never exposes the
+     panel's dark fill at an edge. ---- */
   document.querySelectorAll("[data-parallax]").forEach(function (bg) {
-    gsap.fromTo(bg, { yPercent: -6, scale: 1.16 }, {
-      yPercent: 6, scale: 1.16, ease: "none",
+    gsap.fromTo(bg, { yPercent: -18, scale: 1.5 }, {
+      yPercent: 18, scale: 1.5, ease: "none",
       scrollTrigger: { trigger: bg.parentElement, start: "top bottom", end: "bottom top", scrub: true }
     });
   });
+
+  /* ---- story photo parallax: the founder portrait drifts slower than
+     the text beside it as the page scrolls, same lag as the panel bgs. ---- */
+  document.querySelectorAll("[data-parallax-img]").forEach(function (img) {
+    var card = img.closest(".story__media") || img;
+    gsap.fromTo(card, { yPercent: -10 }, {
+      yPercent: 10, ease: "none",
+      scrollTrigger: { trigger: card, start: "top bottom", end: "bottom top", scrub: true }
+    });
+  });
+
+  /* ---- curtain reveal: the CLOSE panel pins in place while the CONTACT
+     band that follows it keeps scrolling at normal speed and slides up
+     over it, covering it like a sheet drawn over the previous panel.
+     pinSpacing:false means no gap is reserved — the next section's own
+     normal-flow scroll is what does the covering. ---- */
+  (function () {
+    var closeHeading = document.getElementById("s-close");
+    var closePanel = closeHeading && closeHeading.closest("section");
+    if (!closePanel) return;
+    ScrollTrigger.create({
+      trigger: closePanel, start: "top top",
+      end: "+=100%", pin: true, pinSpacing: false,
+      // this removes the panel's height from the doc flow while pinned —
+      // every trigger below it needs to recompute against that shift, so
+      // (like the pinned arc section above) it must refresh first.
+      refreshPriority: 10, invalidateOnRefresh: true
+    });
+  })();
 
   /* ---- the swoop spine: two braided threads. A strong lead, and a
      lighter trail — offset, twisted, and drawn on a lag so it winds
